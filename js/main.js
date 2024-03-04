@@ -1,3 +1,4 @@
 import { photoData } from './data';
+import { renderThumbnails } from './thumbnail';
 
-console.log(photoData);
+renderThumbnails(photoData);
