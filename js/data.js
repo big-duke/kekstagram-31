@@ -1,4 +1,4 @@
-import {createIdGenerator, getRandomArrayElement, getRandomInteger} from './util';
+import {createIdGenerator, getRandomArrayElement, getRandomInteger} from './util.js';
 const PHOTOS_COUNT = 25;
 const MESSAGES = [
   'Всё отлично!',
