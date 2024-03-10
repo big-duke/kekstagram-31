@@ -1,3 +1,6 @@
+const COMMENTS_TO_FETCH = 5;
+let renderedCommentsCount = 0;
+
 const commentTemplate = document
   .querySelector('#comment')
   .content.querySelector('.social__comment');
@@ -7,9 +10,17 @@ const commentLoaderButton = document.querySelector('.social__comments-loader');
 
 
 function renderComments(comments) {
+  renderedCommentsCount += COMMENTS_TO_FETCH;
+  if (renderedCommentsCount >= comments.length) {
+    commentLoaderButton.classList.add('hidden');
+    renderedCommentsCount = comments.length;
+  } else {
+    commentLoaderButton.classList.remove('hidden');
+  }
+
   container.innerHTML = '';
   const fragment = document.createDocumentFragment();
-  comments.forEach((item) => {
+  comments.slice(0,renderedCommentsCount).forEach((item) => {
     const comment = createComment(item);
     fragment.append(comment);
   });
@@ -25,8 +36,7 @@ function createComment(data) {
 
   return comment;
 }
-function setupComments(){
-  commentCountContainerElement.classList.add('hidden');
-  commentLoaderButton.classList.add('hidden');
-}
-export {renderComments, setupComments};
+
+
+
+export {renderComments};
