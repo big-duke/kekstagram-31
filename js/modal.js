@@ -1,3 +1,5 @@
+import { renderComments, resetCommentsCount } from './comments';
+
 const pictureModal = document.querySelector('.big-picture');
 
 const closeModalButton = document.querySelector('.big-picture__cancel');
@@ -7,17 +9,11 @@ const likesCountElement = document.querySelector('.likes-count');
 
 const captionElement = document.querySelector('.social__caption');
 
-const commentTemplate = document.querySelector('#comment').content.querySelector('.social__comment');
-const container = document.querySelector('.social__comments');
 
-const commentTotalCountElement = document.querySelector('.social__comment-total-count');
-const commentShownCountElement = document.querySelector('.social__comment-shown-count');
+const commentsLoaderButton = document.querySelector('.social__comments-loader');
 
-const commentLoaderButton = document.querySelector('.social__comments-loader');
 
-const COMMENTS_TO_FETCH = 5;
-let renderedCommentsCount = 0;
-let comments = [];
+let pictureComments = [];
 
 function showModal(data) {
   pictureModal.classList.remove('hidden');
@@ -29,46 +25,16 @@ function showModal(data) {
   likesCountElement.textContent = data.likes;
   captionElement.textContent = data.description;
 
-  comments = data.comments;
+  pictureComments = data.comments;
 
-  renderComments(comments);
+  renderComments(pictureComments);
 }
 
 function closeModal() {
-   renderedCommentsCount = 0;
+  resetCommentsCount();
   pictureModal.classList.add('hidden');
   document.body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeyDown);
-}
-function createComment(data) {
-  const comment = commentTemplate.cloneNode(true);
-
-  comment.querySelector('img').src = data.avatar;
-  comment.querySelector('img').alt = data.name;
-  comment.querySelector('.social__text').textContent = data.message;
-
-  return comment;
-}
-
-function renderComments(comments) {
-  renderedCommentsCount += COMMENTS_TO_FETCH;
-
-  if (renderedCommentsCount >= comments.length) {
-    commentLoaderButton.classList.add('hidden');
-    renderedCommentsCount = comments.length;
-  } else {
-    commentLoaderButton.classList.remove('hidden');
-  }
-
-  container.innerHTML = '';
-  const fragment = document.createDocumentFragment();
-  comments.slice(0,renderedCommentsCount).forEach((item) => {
-    const comment = createComment(item);
-    fragment.append(comment);
-  });
-  container.append(fragment);
-  commentTotalCountElement.textContent = comments.length;
-  commentShownCountElement.textContent = renderedCommentsCount;
 }
 
 
@@ -83,10 +49,10 @@ function onDocumentKeyDown(e) {
 }
 
 function onCommentLoaderClick() {
-  renderComments(comments);
+  renderComments(pictureComments);
 }
 
 
 closeModalButton.addEventListener('click', onCloseModalButtonClick);
-commentLoaderButton.addEventListener('click', onCommentLoaderClick);
+commentsLoaderButton.addEventListener('click', onCommentLoaderClick);
 export { showModal };
